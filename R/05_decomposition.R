@@ -1,23 +1,14 @@
-# Install (only needed once, skip if already installed)
-install.packages("oaxaca")
-
-library(oaxaca)
-# ============================================================
 # 05_decomposition.R
-# Purpose : Blinder-Oaxaca decomposition of LST gap between
-#           income groups (answers SQ3 - main dissertation method)
-# Input   : 3.DataProcessed/tracts_with_groups.csv
-# Output  : output_figures/fig04_oaxaca_decomposition.png
-# ============================================================
-
+# Install
+install.packages("oaxaca")
+library(oaxaca)
 library(tidyverse)
 library(oaxaca)
 
-
-# ---- 1. Load data ----
+# 1. Load data
 data <- read_csv("3.DataProcessed/tracts_with_groups.csv")
 
-# oaxaca() requires the group variable as 0/1 (numeric), not factor/string
+# oaxaca() requires the group variable in 0/1 (numeric) form, not factor/string
 data <- data %>%
   mutate(group_numeric = if_else(income_group == "Low-Income", 1, 0))
 
@@ -27,7 +18,6 @@ oaxaca_result <- oaxaca(
   data = data,
   R = 100  # number of bootstrap replications for standard errors
 )
-
 summary(oaxaca_result)
 
 # ---- 3. Prepare data for Figure 4 (weight = 0.5, Reimers) ----
@@ -64,9 +54,7 @@ fig4 <- ggplot(decomp_df, aes(x = reorder(variable, contribution), y = contribut
     fill = "Effect Type"
   ) +
   theme_minimal(base_size = 12)
-
 print(fig4)
-
 ggsave(
   "4.Analysis/output_figures/fig04_oaxaca_decomposition.png",
   fig4, width = 8, height = 5, dpi = 300

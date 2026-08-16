@@ -1,20 +1,11 @@
-# ============================================================
 # 03_anova.R
-# Purpose : Test whether summer mean LST differs significantly
-#           between high-income and low-income census tracts
-#           (answers SQ1)
-# Method  : Median split on EP_POV150 + Welch two-sample t-test
-# Input   : 3.DataProcessed/tracts_for_R.csv
-# Output  : output_figures/fig02_boxplot_LST_by_income.png
-#           3.DataProcessed/tracts_with_groups.csv
-# ============================================================
 
 library(tidyverse)
 
-# ---- 1. Load data ----
+# 1: LOAD DATA
 data <- read_csv("3.DataProcessed/tracts_for_R.csv")
 
-# ---- 2. Create income group (median split on EP_POV150) ----
+# 2: CREATE INCOME GROUP (median split on EP_POV150)
 # EP_POV150 = % of population below 150% of the poverty line
 # Higher EP_POV150 = more poverty = lower socioeconomic status
 median_pov <- median(data$EP_POV150, na.rm = TRUE)
@@ -28,7 +19,7 @@ data <- data %>%
 # Check group sizes (should be close to 348/349)
 table(data$income_group)
 
-# ---- 3. Descriptive stats per group ----
+# 3: DESCRIPTIVE STATS PER GROUP
 group_stats <- data %>%
   group_by(income_group) %>%
   summarise(
@@ -40,7 +31,7 @@ group_stats <- data %>%
   )
 print(group_stats)
 
-# ---- 4. Welch two-sample t-test ----
+# 4: WELCH TWO-SAMPLE T-TEST
 # (var.equal = FALSE is the default -> this IS the Welch test)
 t_result <- t.test(LST_mean ~ income_group, data = data)
 print(t_result)
@@ -50,7 +41,7 @@ lst_gap <- group_stats$mean_LST[group_stats$income_group == "Low-Income"] -
   group_stats$mean_LST[group_stats$income_group == "High-Income"]
 cat("LST gap (Low-Income minus High-Income):", round(lst_gap, 2), "degrees C\n")
 
-# ---- 5. Boxplot (Figure 2) ----
+# 5: BOXPLOT
 fig2 <- ggplot(data, aes(x = income_group, y = LST_mean, fill = income_group)) +
   geom_boxplot(alpha = 0.7, outlier.color = "black") +
   scale_fill_manual(values = c("Low-Income" = "#d73027", "High-Income" = "#4575b4")) +
@@ -70,5 +61,5 @@ ggsave(
   fig2, width = 6, height = 5, dpi = 300
 )
 
-# ---- 6. Save group assignment for later stages (Stage C & D) ----
+# 6: SAVE GROUP ASSIGNMENT
 write_csv(data, "3.DataProcessed/tracts_with_groups.csv")
