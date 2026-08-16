@@ -7,7 +7,7 @@ This repository contains the analysis code for the dissertation *"To What Extent
 
 ## Repository Structure
 
-​```
+```
 ├── GEE/
 │   └── LST_NDVI_MiamiDade_2022.js   # Extracts summer 2022 LST and NDVI from Landsat
 ├── R/
@@ -18,7 +18,7 @@ This repository contains the analysis code for the dissertation *"To What Extent
 │   ├── 05_decomposition.R   # Blinder-Oaxaca decomposition (SQ3)
 │   └── 06_bimodality.R      # Bimodality test + building density check
 └── README.md
-​```
+```
 
 ## Workflow
 
