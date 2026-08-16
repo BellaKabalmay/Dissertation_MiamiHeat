@@ -5,7 +5,7 @@ data <- read_csv("3.DataProcessed/tracts_for_R.csv")
 
 median_val <- median(data$EP_POV150, na.rm = TRUE)
 
-# Histogram + density curve, with median split line
+# 1: HISTOGRAM + DENSITY CURVE, with median split line
 p <- ggplot(data, aes(x = EP_POV150)) +
   geom_histogram(aes(y = after_stat(density)), bins = 30,
                  fill = "#2E5090", color = "white", alpha = 0.7) +
@@ -17,22 +17,17 @@ p <- ggplot(data, aes(x = EP_POV150)) +
        x = "EP_POV150 (% of population below 150% poverty line)",
        y = "Density") +
   theme_minimal(base_size = 13)
-
 print(p)
-
 ggsave("4.Analysis/output_figures/fig_EP_POV150_distribution.png",
        p, width = 8, height = 5, dpi = 300)
 
-# Formal statistical test for bimodality (Hartigan's dip test)
+# 2: FORMAL STATISTICAL TEST FOR BIMODALITY (Hartigan's dip test)
 install.packages("diptest")   # once only
 library(diptest)
 dip.test(data$EP_POV150)
 
-# ============================================================
-# Scatter plot: LST vs BLD_Density per income group
+# 3: SCATTER PLOT - LST vs BLD_Density per income group
 # Verifies the Section SQ2/decomposition claim about building density
-# ============================================================
-
 data_groups <- read_csv("3.DataProcessed/tracts_with_groups.csv")
 
 fig_bld <- ggplot(data_groups, aes(x = BLD_Density, y = LST_mean, color = income_group)) +
@@ -47,13 +42,11 @@ fig_bld <- ggplot(data_groups, aes(x = BLD_Density, y = LST_mean, color = income
     color = "Income Group"
   ) +
   theme_minimal(base_size = 13)
-
 print(fig_bld)
-
 ggsave("4.Analysis/output_figures/fig05_LST_vs_BLDDensity.png",
        fig_bld, width = 8, height = 5, dpi = 300)
 
-# Also compare the range of BLD_Density in each group (Claire asked about this)
+# 4: COMPARE BLD_Density RANGE BY GROUP (Claire asked about this)
 data_groups %>%
   group_by(income_group) %>%
   summarise(

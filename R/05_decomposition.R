@@ -5,14 +5,14 @@ library(oaxaca)
 library(tidyverse)
 library(oaxaca)
 
-# 1. Load data
+# 1: LOAD DATA
 data <- read_csv("3.DataProcessed/tracts_with_groups.csv")
 
 # oaxaca() requires the group variable in 0/1 (numeric) form, not factor/string
 data <- data %>%
   mutate(group_numeric = if_else(income_group == "Low-Income", 1, 0))
 
-# ---- 2. Run Blinder-Oaxaca decomposition ----
+# 2: RUN BLINDER-OAXACA DECOMPOSITION
 oaxaca_result <- oaxaca(
   formula = LST_mean ~ NDVI_mean + IMP_mean + BLD_Density + GRN_pct | group_numeric,
   data = data,
@@ -20,7 +20,7 @@ oaxaca_result <- oaxaca(
 )
 summary(oaxaca_result)
 
-# ---- 3. Prepare data for Figure 4 (weight = 0.5, Reimers) ----
+# 3: PREPARE DATA FOR FIGURE 4 (weight = 0.5, Reimers)
 decomp_df <- oaxaca_result$twofold$variables[[3]] %>%
   as.data.frame() %>%
   rownames_to_column("variable") %>%
@@ -37,7 +37,7 @@ decomp_df <- oaxaca_result$twofold$variables[[3]] %>%
   ))
 print(decomp_df)
 
-# ---- 4. Plot Figure 4 ----
+# 4: PLOT FIGURE 4
 fig4 <- ggplot(decomp_df, aes(x = reorder(variable, contribution), y = contribution, fill = effect_type)) +
   geom_col(position = "dodge") +
   coord_flip() +
