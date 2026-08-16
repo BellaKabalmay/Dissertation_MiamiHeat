@@ -30,7 +30,8 @@ This repository contains the analysis code for the dissertation *"To What Extent
 │   ├── 02_descriptive.R     # Summary statistics, correlation matrix, distribution plots
 │   ├── 03_anova.R           # Income-group split + Welch t-test on LST (SQ1)
 │   ├── 04_regression.R      # Separate OLS regressions by income group (SQ2)
-│   └── 05_decomposition.R   # Blinder-Oaxaca decomposition of the LST gap (SQ3)
+│   ├── 05_decomposition.R   # Blinder-Oaxaca decomposition of the LST gap (SQ3)
+│   └── 06_bimodality.R      # Bimodality test for EP_POV150 and LST vs building density check
 └── README.md
 ```
 
@@ -38,7 +39,7 @@ This repository contains the analysis code for the dissertation *"To What Extent
 
 1. **Google Earth Engine** (`GEE/LST_NDVI_MiamiDade_2022.js`) — extracts summer 2022 mean LST and NDVI for Miami-Dade County from Landsat imagery.
 2. **QGIS** (not scripted) — joins LST/NDVI rasters with SVI, building footprint, impervious surface, and green space layers to census tracts; cleans and exports `tracts_for_R.csv`.
-3. **R** (`R/01_setup.R` → `R/05_decomposition.R`) — run in order. Each script assumes the previous one has been run in the same session (`01_setup.R` loads the data used by all subsequent scripts).
+3. **R** (`R/01_setup.R` → `R/06_bimodality.R`) — run in order. Each script assumes the previous one has been run in the same session (`01_setup.R` loads the data used by all subsequent scripts).
 
 ## Data
 
